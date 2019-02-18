@@ -10,7 +10,60 @@
 static const int kImGuiMargin = 10;
 
 
+namespace ImGui {
+    IMGUI_API bool Checkbox(ofParameter<bool>& v);
+    IMGUI_API bool Checkbox(const char* label, ofParameter<bool>* v);
+    IMGUI_API bool CheckboxFlags(ofParameter<unsigned int>& flags, unsigned int flags_value);
+    IMGUI_API bool CheckboxFlags(const char* label, ofParameter<unsigned int>* flags, unsigned int flags_value);
+    IMGUI_API bool RadioButton(ofParameter<int>& v, int v_button);
+    IMGUI_API bool RadioButton(const char* label, ofParameter<int>* v, int v_button);
+    IMGUI_API bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool InputTextMultiline(const char* label, std::string* str, ImVec2 const& size = ImVec2(0, 0), ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool InputText(ofParameter<std::string>& str, ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool InputTextMultiline(ofParameter<std::string>& str, ImVec2 const& size = ImVec2(0, 0), ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool InputText(const char* label, ofParameter<std::string>* str, ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool InputTextMultiline(const char* label, ofParameter<std::string>* str, ImVec2 const& size = ImVec2(0, 0), ImGuiInputTextFlags flags = ImGuiInputTextFlags_CallbackResize, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
+    IMGUI_API bool DragFloat(ofParameter<float>& v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat(const char* label, ofParameter<float>* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat2(const char* label, ofVec2f* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat2(ofParameter<ofVec2f>& v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat2(const char* label, ofParameter<ofVec2f>* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat3(const char* label, ofVec3f* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat3(ofParameter<ofVec3f>& v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat3(const char* label, ofParameter<ofVec3f>* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat4(const char* label, ofVec4f* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat4(ofParameter<ofVec4f>& v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloat4(const char* label, ofParameter<ofVec4f>* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool DragFloatRange2(const char* label, ofParameter<float>* v_current_min, ofParameter<float>* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", const char* format_max = NULL, float power = 1.0f);
+    IMGUI_API bool DragInt(ofParameter<int>& v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d");                                       // If v_min >= v_max we have no bound
+    IMGUI_API bool DragInt(const char* label, ofParameter<int>* v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d");                    // If v_min >= v_max we have no bound
+    IMGUI_API bool DragIntRange2(const char* label, ofParameter<int>* v_current_min, ofParameter<int>* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", const char* format_max = NULL);
+    IMGUI_API bool SliderFloat(ofParameter<float>& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);     // adjust format to decorate the value with a prefix or a suffix for in-slider labels or unit display. Use power!=1.0 for power curve sliders
+    IMGUI_API bool SliderFloat(const char* label, ofParameter<float>* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);     // adjust format to decorate the value with a prefix or a suffix for in-slider labels or unit display. Use power!=1.0 for power curve sliders
+    IMGUI_API bool SliderFloat2(const char* label, ofVec2f* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat2(ofParameter<ofVec2f>& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat2(const char* label, ofParameter<ofVec2f>* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat3(const char* label, ofVec3f* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat3(ofParameter<ofVec3f>& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat3(const char* label, ofParameter<ofVec3f>* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat4(const char* label, ofVec4f* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat4(ofParameter<ofVec4f>& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderFloat4(const char* label, ofParameter<ofVec4f>* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool SliderAngle(ofParameter<float>& v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f);
+    IMGUI_API bool SliderAngle(const char* label, ofParameter<float>* v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f);
+    IMGUI_API bool SliderInt(ofParameter<int>& v, int v_min, int v_max, const char* format = "%d");
+    IMGUI_API bool SliderInt(const char* label, ofParameter<int>* v, int v_min, int v_max, const char* format = "%d");
+    IMGUI_API bool VSliderFloat(const ImVec2& size, ofParameter<float>& v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool VSliderFloat(const char* label, const ImVec2& size, ofParameter<float>* v, float v_min, float v_max, const char* format = "%.3f", float power = 1.0f);
+    IMGUI_API bool VSliderInt(const ImVec2& size, ofParameter<int>& v, int v_min, int v_max, const char* format = "%d");
+    IMGUI_API bool VSliderInt(const char* label, const ImVec2& size, ofParameter<int>* v, int v_min, int v_max, const char* format = "%d");
+    IMGUI_API bool ColorEdit3(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorEdit4(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorPicker3(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorPicker4(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0, const ofColor* ref_col = NULL);
+    IMGUI_API bool ColorButton(const char* desc_id, ofColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
 
+}
 
 namespace ofxImGui
 {

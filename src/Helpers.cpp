@@ -777,3 +777,338 @@ bool ofxImGui::VectorListBox(const char* label, int* currIndex, std::vector<std:
                    static_cast<void*>(&values), values.size());
 }
 
+namespace ImGui {
+    IMGUI_API bool Checkbox(ofParameter<bool>& v) {
+        return Checkbox(v.getEscapedName().c_str(), &v);
+    }
+    IMGUI_API bool Checkbox(const char * label, ofParameter<bool>* v) {
+        bool val = v->get();
+        bool changed = Checkbox(label, &val);
+        if (changed) v->set(val);
+        return changed;
+    }
+
+    IMGUI_API bool CheckboxFlags(ofParameter<unsigned int>& flags, unsigned int flags_value) {
+        return CheckboxFlags(flags.getEscapedName().c_str(), &flags, flags_value);
+    }
+
+    IMGUI_API bool CheckboxFlags(const char * label, ofParameter<unsigned int>* flags, unsigned int flags_value) {
+        unsigned int val = flags->get();
+        bool changed = CheckboxFlags(label, &val, flags_value);
+        if (changed) flags->set(val);
+        return changed;
+    }
+
+    IMGUI_API bool RadioButton(ofParameter<int>& v, int v_button) {
+        return RadioButton(v.getEscapedName().c_str(), &v, v_button);
+    }
+
+    IMGUI_API bool RadioButton(const char * label, ofParameter<int>* v, int v_button) {
+        int val = v->get();
+        bool changed = RadioButton(label, &val, v_button);
+        if (changed) v->set(val);
+        return changed;
+    }
+
+    struct StringCB {
+        std::string* str;
+        ImGuiTextEditCallback chain;
+        void* user_data;
+        StringCB(std::string* _str, ImGuiTextEditCallback _chain, void* _user_data)
+            : str(_str), chain(_chain), user_data(_user_data) { }
+    };
+    
+    static int InputTextStdStringCallback(ImGuiInputTextCallbackData *data) {
+        StringCB *cb_data = (StringCB *)data->UserData;
+        if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+            std::string* str = cb_data->str;
+            IM_ASSERT(data->Buf == str->c_str());
+            str->resize(data->BufTextLen);
+            data->Buf = (char*)str->c_str();
+            if (cb_data->chain) {
+                data->UserData = cb_data->user_data;
+                return cb_data->chain(data);
+            }
+        }
+        else if (cb_data->chain) {
+            data->UserData = cb_data->user_data;
+            return cb_data->chain(data);
+        }
+        return 0;
+    }
+    struct ofParameterStringCB {
+        ofParameter<std::string>* str;
+        ImGuiTextEditCallback chain;
+        void* user_data;
+        ofParameterStringCB(ofParameter<std::string>* _str, ImGuiTextEditCallback _chain, void* _user_data)
+            : str(_str), chain(_chain), user_data(_user_data) { }
+    };
+
+    static int InputTextOfParameterStringCallback(ImGuiInputTextCallbackData *data) {
+        ofParameterStringCB *cb_data = (ofParameterStringCB *)data->UserData;
+        if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+            std::string *str = (std::string*)cb_data->str->getInternalObject();
+            IM_ASSERT(data->Buf == str->c_str());
+            str->resize(data->BufTextLen);
+            data->Buf = (char*)str->c_str();
+            if (cb_data->chain) {
+                data->UserData = cb_data->user_data;
+                return cb_data->chain(data);
+            }
+        }
+        else if (cb_data->chain) {
+            data->UserData = cb_data->user_data;
+            return cb_data->chain(data);
+        }
+        return 0;
+    }
+
+    IMGUI_API bool InputText(const char * label, std::string * str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        StringCB cb_data(str, callback, user_data);
+        return InputText(label, (char*)str->c_str(), str->capacity()+1, flags, InputTextStdStringCallback, (void*)&cb_data);
+    }
+
+    IMGUI_API bool InputTextMultiline(const char * label, std::string * str, ImVec2 const & size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        StringCB cb_data(str, callback, user_data);
+        return InputTextMultiline(label, (char*)str->c_str(), str->capacity()+1, size, flags, InputTextStdStringCallback, (void*)&cb_data);
+    }
+
+    IMGUI_API bool InputText(ofParameter<std::string>& str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        return InputText(str.getEscapedName().c_str(), &str, flags, callback, user_data);
+    }
+
+    IMGUI_API bool InputTextMultiline(ofParameter<std::string>& str, ImVec2 const & size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        return InputTextMultiline(str.getEscapedName().c_str(), &str, size, flags, callback, user_data);
+    }
+
+    IMGUI_API bool InputText(const char * label, ofParameter<std::string>* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        ofParameterStringCB cb_data(str, callback, user_data);
+        return InputText(label, (char*)str->get().c_str(), str->get().capacity()+1, flags, InputTextOfParameterStringCallback, (void*)&cb_data);
+    }
+
+    IMGUI_API bool InputTextMultiline(const char * label, ofParameter<std::string>* str, ImVec2 const & size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
+        ofParameterStringCB cb_data(str, callback, user_data);
+        return InputTextMultiline(label, (char*)str->get().c_str(), str->get().capacity()+1, size, flags, InputTextOfParameterStringCallback, (void*)&cb_data);
+    }
+
+    IMGUI_API bool DragFloat(ofParameter<float>& v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat(v.getEscapedName().c_str(), &v, v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat(const char * label, ofParameter<float>* v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        float f = v->get();
+        if (DragFloat(label, &f, v_speed, v_min, v_max, format, power)) {
+            v->set(f);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragFloat2(const char * label, ofVec2f * v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat2(label, v->getPtr(), v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat2(ofParameter<ofVec2f>& v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat2(v.getEscapedName().c_str(), &v, v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat2(const char * label, ofParameter<ofVec2f>* v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        ofVec2f vec = v->get();
+        if (DragFloat2(label, vec.getPtr(), v_speed, v_min, v_max, format, power)) {
+            v->set(vec);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragFloat3(const char * label, ofVec3f * v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat3(label, v->getPtr(), v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat3(ofParameter<ofVec3f>& v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat3(v.getEscapedName().c_str(), &v, v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat3(const char * label, ofParameter<ofVec3f>* v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        ofVec3f vec = v->get();
+        if (DragFloat3(label, vec.getPtr(), v_speed, v_min, v_max, format, power)) {
+            v->set(vec);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragFloat4(const char * label, ofVec4f * v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat4(label, v->getPtr(), v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat4(ofParameter<ofVec4f>& v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        return DragFloat4(v.getEscapedName().c_str(), &v, v_speed, v_min, v_max, format, power);
+    }
+    IMGUI_API bool DragFloat4(const char * label, ofParameter<ofVec4f>* v, float v_speed, float v_min, float v_max, const char * format, float power) {
+        ofVec4f vec = v->get();
+        if (DragFloat4(label, vec.getPtr(), v_speed, v_min, v_max, format, power)) {
+            v->set(vec);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragFloatRange2(const char * label, ofParameter<float>* v_current_min, ofParameter<float>* v_current_max, float v_speed, float v_min, float v_max, const char * format, const char * format_max, float power) {
+        float min = v_current_min->get(), max = v_current_max->get();
+        if (DragFloatRange2(label, &min, &max, v_speed, v_min, v_max, format, format_max, power)) {
+            v_current_min->set(min);
+            v_current_max->set(max);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragInt(ofParameter<int>& v, float v_speed, int v_min, int v_max, const char * format) {
+        return DragInt(v.getEscapedName().c_str(), &v, v_speed, v_min, v_max, format);
+    }
+    IMGUI_API bool DragInt(const char * label, ofParameter<int>* v, float v_speed, int v_min, int v_max, const char * format) {
+        int i = v->get();
+        if (DragInt(label, &i, v_speed, v_min, v_max, format)) {
+            v->set(i);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool DragIntRange2(const char * label, ofParameter<int>* v_current_min, ofParameter<int>* v_current_max, float v_speed, int v_min, int v_max, const char * format, const char * format_max) {
+        int current_min = v_current_min->get(), current_max = v_current_max->get();
+        if (DragIntRange2(label, &current_min, &current_max, v_speed, v_min, v_max, format, format_max)) {
+            v_current_min->set(current_min);
+            v_current_max->set(current_max);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool SliderFloat(ofParameter<float>& v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat(v.getEscapedName().c_str(), &v, v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat(const char * label, ofParameter<float>* v, float v_min, float v_max, const char * format, float power) {
+        float f = v->get();
+        if (SliderFloat(label, &f, v_min, v_max, format, power)) {
+            v->set(f);
+            return true;
+        }
+        return false;
+    }
+
+    IMGUI_API bool SliderFloat2(const char * label, ofVec2f * v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat2(label, v->getPtr(), v_min, v_max, format, power);
+    }
+
+    IMGUI_API bool SliderFloat2(ofParameter<ofVec2f>& v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat2(v.getEscapedName().c_str(), &v, v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat2(const char * label, ofParameter<ofVec2f>* v, float v_min, float v_max, const char * format, float power) {
+        ofVec2f f = v->get();
+        if (SliderFloat2(label, f.getPtr(), v_min, v_max, format, power)) {
+            v->set(f);
+            return true;
+        }
+        return false;
+    }
+
+    IMGUI_API bool SliderFloat3(const char * label, ofVec3f * v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat3(label, v->getPtr(), v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat3(ofParameter<ofVec3f>& v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat3(v.getEscapedName().c_str(), &v, v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat3(const char * label, ofParameter<ofVec3f>* v, float v_min, float v_max, const char * format, float power) {
+        ofVec3f f = v->get();
+        if (SliderFloat3(label, f.getPtr(), v_min, v_max, format, power)) {
+            v->set(f);
+            return true;
+        }
+        return false;
+    }
+
+    IMGUI_API bool SliderFloat4(const char * label, ofVec4f * v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat4(label, v->getPtr(), v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat4(ofParameter<ofVec4f>& v, float v_min, float v_max, const char * format, float power) {
+        return SliderFloat4(v.getEscapedName().c_str(), &v, v_min, v_max, format, power);
+    }
+    IMGUI_API bool SliderFloat4(const char * label, ofParameter<ofVec4f>* v, float v_min, float v_max, const char * format, float power) {
+        ofVec4f f = v->get();
+        if (SliderFloat4(label, f.getPtr(), v_min, v_max, format, power)) {
+            v->set(f);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool SliderAngle(ofParameter<float>& v_rad, float v_degrees_min, float v_degrees_max) {
+        return SliderAngle(v_rad.getEscapedName().c_str(), &v_rad, v_degrees_min, v_degrees_max);
+    }
+    IMGUI_API bool SliderAngle(const char * label, ofParameter<float>* v_rad, float v_degrees_min, float v_degrees_max) {
+        if (SliderAngle(label, (float*)v_rad->getInternalObject(), v_degrees_min, v_degrees_max)) {
+            v_rad->set(v_rad->get());
+            return true;
+        }
+        return true;
+    }
+    IMGUI_API bool SliderInt(ofParameter<int>& v, int v_min, int v_max, const char * format) {
+        return SliderInt(v.getEscapedName().c_str(), &v, v_min, v_max, format);
+    }
+    IMGUI_API bool SliderInt(const char * label, ofParameter<int>* v, int v_min, int v_max, const char * format) {
+        if (SliderInt(label, (int*)v->getInternalObject(), v_min, v_max, format)) {
+            v->set(v->get());
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool VSliderFloat(const ImVec2 & size, ofParameter<float>& v, float v_min, float v_max, const char * format, float power) {
+        return VSliderFloat(v.getEscapedName().c_str(), size, &v, v_min, v_max, format, power);
+    }
+    IMGUI_API bool VSliderFloat(const char * label, const ImVec2 & size, ofParameter<float>* v, float v_min, float v_max, const char * format, float power) {
+        if (VSliderFloat(label, size, (float*)v->getInternalObject(), v_min, v_max, format, power)) {
+            v->set(v->get());
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool VSliderInt(const ImVec2 & size, ofParameter<int>& v, int v_min, int v_max, const char * format) {
+        return VSliderInt(v.getEscapedName().c_str(), size, &v, v_min, v_max, format);
+    }
+    IMGUI_API bool VSliderInt(const char * label, const ImVec2 & size, ofParameter<int>* v, int v_min, int v_max, const char * format) {
+        if (VSliderInt(label, size, (int*)v->getInternalObject(), v_min, v_max, format)) {
+            v->set(v->get());
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorEdit3(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
+        float temp[3] = { color->r, color->g, color->b };
+        if (ColorEdit3(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2]);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorEdit4(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
+        float temp[4] = { color->r, color->g, color->b, color->a };
+        if (ColorEdit4(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2], temp[3]);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorPicker3(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
+        float temp[3] = { color->r, color->g, color->b };
+        if (ColorPicker3(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2]);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorPicker4(const char * label, ofColor * color, ImGuiColorEditFlags flags, const ofColor * ref_col) {
+        float temp[4] = { color->r, color->g, color->b, color->a };
+        if (ref_col) {
+            float ref[4] = { ref_col->r, ref_col->g, ref_col->b, ref_col->a };
+            if (ColorPicker4(label, temp, flags, ref)) {
+                color->set(temp[0], temp[1], temp[2], temp[3]);
+                return true;
+            }
+        } else if (ColorPicker4(label, temp, flags, nullptr)) {
+            color->set(temp[0], temp[1], temp[2], temp[3]);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorButton(const char * desc_id, ofColor const & col, ImGuiColorEditFlags flags, ImVec2 size) {
+        return ColorButton(desc_id, ImVec4(col.r, col.g, col.b, col.a), flags, size);
+    }
+}
