@@ -58,11 +58,21 @@ namespace ImGui {
     IMGUI_API bool VSliderInt(const ImVec2& size, ofParameter<int>& v, int v_min, int v_max, const char* format = "%d");
     IMGUI_API bool VSliderInt(const char* label, const ImVec2& size, ofParameter<int>* v, int v_min, int v_max, const char* format = "%d");
     IMGUI_API bool ColorEdit3(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorEdit3(const char* label, ofFloatColor *color, ImGuiColorEditFlags flags = 0);
     IMGUI_API bool ColorEdit4(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorEdit4(const char* label, ofFloatColor *color, ImGuiColorEditFlags flags = 0);
     IMGUI_API bool ColorPicker3(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0);
+    IMGUI_API bool ColorPicker3(const char* label, ofFloatColor *color, ImGuiColorEditFlags flags = 0);
     IMGUI_API bool ColorPicker4(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0, const ofColor* ref_col = NULL);
+    IMGUI_API bool ColorPicker4(const char* label, ofFloatColor *color, ImGuiColorEditFlags flags = 0, const ofFloatColor* ref_col = NULL);
     IMGUI_API bool ColorButton(const char* desc_id, ofColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
-
+    IMGUI_API bool ColorButton(const char* desc_id, ofColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
+    IMGUI_API void Text(std::string const& text);
+    IMGUI_API void TextColored(ImVec4 const& col, std::string const& text);
+    IMGUI_API void TextDisabled(std::string const& text);
+    IMGUI_API void TextWrapped(std::string const& text);
+    IMGUI_API void LabelText(const char* label, std::string const& text);
+    IMGUI_API void BulletText(std::string const& text);
 }
 
 namespace ofxImGui

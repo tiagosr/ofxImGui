@@ -1078,6 +1078,14 @@ namespace ImGui {
         }
         return false;
     }
+    IMGUI_API bool ColorEdit3(const char * label, ofFloatColor * color, ImGuiColorEditFlags flags) {
+        float temp[3] = { color->r, color->g, color->b };
+        if (ColorEdit3(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2]);
+            return true;
+        }
+        return false;
+    }
     IMGUI_API bool ColorEdit4(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
         float temp[4] = { color->r, color->g, color->b, color->a };
         if (ColorEdit4(label, temp, flags)) {
@@ -1086,7 +1094,23 @@ namespace ImGui {
         }
         return false;
     }
+    IMGUI_API bool ColorEdit4(const char * label, ofFloatColor * color, ImGuiColorEditFlags flags) {
+        float temp[4] = { color->r, color->g, color->b, color->a };
+        if (ColorEdit4(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2], temp[3]);
+            return true;
+        }
+        return false;
+    }
     IMGUI_API bool ColorPicker3(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
+        float temp[3] = { color->r, color->g, color->b };
+        if (ColorPicker3(label, temp, flags)) {
+            color->set(temp[0], temp[1], temp[2]);
+            return true;
+        }
+        return false;
+    }
+    IMGUI_API bool ColorPicker3(const char * label, ofFloatColor * color, ImGuiColorEditFlags flags) {
         float temp[3] = { color->r, color->g, color->b };
         if (ColorPicker3(label, temp, flags)) {
             color->set(temp[0], temp[1], temp[2]);
@@ -1108,7 +1132,42 @@ namespace ImGui {
         }
         return false;
     }
+    IMGUI_API bool ColorPicker4(const char * label, ofFloatColor * color, ImGuiColorEditFlags flags, const ofFloatColor * ref_col) {
+        float temp[4] = { color->r, color->g, color->b, color->a };
+        if (ref_col) {
+            float ref[4] = { ref_col->r, ref_col->g, ref_col->b, ref_col->a };
+            if (ColorPicker4(label, temp, flags, ref)) {
+                color->set(temp[0], temp[1], temp[2], temp[3]);
+                return true;
+            }
+        } else if (ColorPicker4(label, temp, flags, nullptr)) {
+            color->set(temp[0], temp[1], temp[2], temp[3]);
+            return true;
+        }
+        return false;
+    }
     IMGUI_API bool ColorButton(const char * desc_id, ofColor const & col, ImGuiColorEditFlags flags, ImVec2 size) {
         return ColorButton(desc_id, ImVec4(col.r, col.g, col.b, col.a), flags, size);
+    }
+    IMGUI_API bool ColorButton(const char * desc_id, ofFloatColor const & col, ImGuiColorEditFlags flags, ImVec2 size) {
+        return ColorButton(desc_id, ImVec4(col.r, col.g, col.b, col.a), flags, size);
+    }
+    IMGUI_API void Text(std::string const & text) {
+        TextUnformatted(text.c_str());
+    }
+    IMGUI_API void TextColored(ImVec4 const & col, std::string const & text) {
+        TextColored(col, "%s", text.c_str());
+    }
+    IMGUI_API void TextDisabled(std::string const & text) {
+        TextDisabled("%s", text.c_str());
+    }
+    IMGUI_API void TextWrapped(std::string const & text) {
+        TextWrapped("%s", text.c_str());
+    }
+    IMGUI_API void LabelText(const char * label, std::string const & text) {
+       LabelText(label, "%s", text.c_str());
+    }
+    IMGUI_API void BulletText(std::string const & text) {
+        BulletText("%s", text.c_str());
     }
 }
