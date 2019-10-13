@@ -66,13 +66,17 @@ namespace ImGui {
     IMGUI_API bool ColorPicker4(const char* label, ofColor *color, ImGuiColorEditFlags flags = 0, const ofColor* ref_col = NULL);
     IMGUI_API bool ColorPicker4(const char* label, ofFloatColor *color, ImGuiColorEditFlags flags = 0, const ofFloatColor* ref_col = NULL);
     IMGUI_API bool ColorButton(const char* desc_id, ofColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
-    IMGUI_API bool ColorButton(const char* desc_id, ofColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
+    IMGUI_API bool ColorButton(const char* desc_id, ofFloatColor const& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0,0));  // display a colored square/button, hover for details, return true when pressed.
     IMGUI_API void Text(std::string const& text);
     IMGUI_API void TextColored(ImVec4 const& col, std::string const& text);
     IMGUI_API void TextDisabled(std::string const& text);
     IMGUI_API void TextWrapped(std::string const& text);
     IMGUI_API void LabelText(const char* label, std::string const& text);
     IMGUI_API void BulletText(std::string const& text);
+    IMGUI_API void Image(const ofBaseHasTexture& image, const ImVec2& size, const ImVec2& uv0 = ImVec2(0,0), const ImVec2& uv1 = ImVec2(1,1), const ImVec4& tint_col = ImVec4(1,1,1,1), const ImVec4& border_col = ImVec4(0,0,0,0));
+    IMGUI_API bool ImageButton(const ofBaseHasTexture& image, const ImVec2& size, const ImVec2& uv0 = ImVec2(0,0),  const ImVec2& uv1 = ImVec2(1,1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0,0,0,0), const ImVec4& tint_col = ImVec4(1,1,1,1));    // <0 frame_padding uses default frame padding settings. 0 for no padding
+    IMGUI_API void Image(const ofTexture& texture, const ImVec2& size, const ImVec2& uv0 = ImVec2(0,0), const ImVec2& uv1 = ImVec2(1,1), const ImVec4& tint_col = ImVec4(1,1,1,1), const ImVec4& border_col = ImVec4(0,0,0,0));
+    IMGUI_API bool ImageButton(const ofTexture& texture, const ImVec2& size, const ImVec2& uv0 = ImVec2(0,0),  const ImVec2& uv1 = ImVec2(1,1), int frame_padding = -1, const ImVec4& bg_col = ImVec4(0,0,0,0), const ImVec4& tint_col = ImVec4(1,1,1,1));    // <0 frame_padding uses default frame padding settings. 0 for no padding
 }
 
 namespace ofxImGui

@@ -1165,9 +1165,21 @@ namespace ImGui {
         TextWrapped("%s", text.c_str());
     }
     IMGUI_API void LabelText(const char * label, std::string const & text) {
-       LabelText(label, "%s", text.c_str());
+        LabelText(label, "%s", text.c_str());
     }
     IMGUI_API void BulletText(std::string const & text) {
         BulletText("%s", text.c_str());
+    }
+    IMGUI_API void Image(const ofBaseHasTexture& image, const ImVec2& size, const ImVec2 & uv0, const ImVec2 & uv1, const ImVec4 & tint_col, const ImVec4 & border_col) {
+        Image(image.getTexture(), size, uv0, uv1, tint_col, border_col);
+    }
+    IMGUI_API bool ImageButton(const ofBaseHasTexture& image, const ImVec2& size, const ImVec2 & uv0, const ImVec2 & uv1, int frame_padding, const ImVec4 & bg_col, const ImVec4 & tint_col) {
+        return ImageButton(image.getTexture(), size, uv0, uv1, frame_padding, bg_col, tint_col);
+    }
+    IMGUI_API void Image(const ofTexture& texture, const ImVec2 & size, const ImVec2 & uv0, const ImVec2 & uv1, const ImVec4 & tint_col, const ImVec4 & border_col) {
+        Image((ImTextureID)texture.getTextureData().textureID, size, uv0, uv1, tint_col, border_col);
+    }
+    IMGUI_API bool ImageButton(const ofTexture& texture, const ImVec2 & size, const ImVec2 & uv0, const ImVec2 & uv1, int frame_padding, const ImVec4 & bg_col, const ImVec4 & tint_col) {
+        return ImageButton((ImTextureID)texture.getTextureData().textureID, size, uv0, uv1, frame_padding, bg_col, tint_col);
     }
 }
