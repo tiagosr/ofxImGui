@@ -453,7 +453,7 @@ bool ofxImGui::AddParameter(ofParameter<void>& parameter)
 bool ofxImGui::AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
 {
 	auto uniqueName = GetUniqueName(parameter);
-	ImGui::Text(uniqueName);
+	ImGui::Text("%s", uniqueName);
 	auto result = false;
 	auto tmpRef = parameter.get();
 	ImGui::PushID(uniqueName);
@@ -1071,7 +1071,7 @@ namespace ImGui {
         return false;
     }
     IMGUI_API bool ColorEdit3(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
-        float temp[3] = { color->r, color->g, color->b };
+        float temp[3] = { (float)color->r, (float)color->g, (float)color->b };
         if (ColorEdit3(label, temp, flags)) {
             color->set(temp[0], temp[1], temp[2]);
             return true;
@@ -1087,7 +1087,7 @@ namespace ImGui {
         return false;
     }
     IMGUI_API bool ColorEdit4(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
-        float temp[4] = { color->r, color->g, color->b, color->a };
+        float temp[4] = { (float)color->r, (float)color->g, (float)color->b, (float)color->a };
         if (ColorEdit4(label, temp, flags)) {
             color->set(temp[0], temp[1], temp[2], temp[3]);
             return true;
@@ -1103,7 +1103,7 @@ namespace ImGui {
         return false;
     }
     IMGUI_API bool ColorPicker3(const char * label, ofColor * color, ImGuiColorEditFlags flags) {
-        float temp[3] = { color->r, color->g, color->b };
+        float temp[3] = { (float)color->r, (float)color->g, (float)color->b };
         if (ColorPicker3(label, temp, flags)) {
             color->set(temp[0], temp[1], temp[2]);
             return true;
@@ -1119,9 +1119,9 @@ namespace ImGui {
         return false;
     }
     IMGUI_API bool ColorPicker4(const char * label, ofColor * color, ImGuiColorEditFlags flags, const ofColor * ref_col) {
-        float temp[4] = { color->r, color->g, color->b, color->a };
+        float temp[4] = { (float)color->r, (float)color->g, (float)color->b, (float)color->a };
         if (ref_col) {
-            float ref[4] = { ref_col->r, ref_col->g, ref_col->b, ref_col->a };
+            float ref[4] = { (float)ref_col->r, (float)ref_col->g, (float)ref_col->b, (float)ref_col->a };
             if (ColorPicker4(label, temp, flags, ref)) {
                 color->set(temp[0], temp[1], temp[2], temp[3]);
                 return true;
