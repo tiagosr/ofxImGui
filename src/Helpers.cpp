@@ -865,12 +865,12 @@ namespace ImGui {
 
     IMGUI_API bool InputText(const char * label, std::string * str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
         StringCB cb_data(str, callback, user_data);
-        return InputText(label, (char*)str->c_str(), str->capacity()+1, flags, InputTextStdStringCallback, (void*)&cb_data);
+        return InputText(label, (char*)str->c_str(), str->capacity()+1, flags | ImGuiInputTextFlags_CallbackResize, InputTextStdStringCallback, (void*)&cb_data);
     }
 
     IMGUI_API bool InputTextMultiline(const char * label, std::string * str, ImVec2 const & size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
         StringCB cb_data(str, callback, user_data);
-        return InputTextMultiline(label, (char*)str->c_str(), str->capacity()+1, size, flags, InputTextStdStringCallback, (void*)&cb_data);
+        return InputTextMultiline(label, (char*)str->c_str(), str->capacity()+1, size, flags | ImGuiInputTextFlags_CallbackResize, InputTextStdStringCallback, (void*)&cb_data);
     }
 
     IMGUI_API bool InputText(ofParameter<std::string>& str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
@@ -883,12 +883,12 @@ namespace ImGui {
 
     IMGUI_API bool InputText(const char * label, ofParameter<std::string>* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
         ofParameterStringCB cb_data(str, callback, user_data);
-        return InputText(label, (char*)str->get().c_str(), str->get().capacity()+1, flags, InputTextOfParameterStringCallback, (void*)&cb_data);
+        return InputText(label, (char*)str->get().c_str(), str->get().capacity()+1, flags | ImGuiInputTextFlags_CallbackResize, InputTextOfParameterStringCallback, (void*)&cb_data);
     }
 
     IMGUI_API bool InputTextMultiline(const char * label, ofParameter<std::string>* str, ImVec2 const & size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void * user_data) {
         ofParameterStringCB cb_data(str, callback, user_data);
-        return InputTextMultiline(label, (char*)str->get().c_str(), str->get().capacity()+1, size, flags, InputTextOfParameterStringCallback, (void*)&cb_data);
+        return InputTextMultiline(label, (char*)str->get().c_str(), str->get().capacity()+1, size, flags | ImGuiInputTextFlags_CallbackResize, InputTextOfParameterStringCallback, (void*)&cb_data);
     }
 
     IMGUI_API bool DragFloat(ofParameter<float>& v, float v_speed, float v_min, float v_max, const char * format, float power) {
